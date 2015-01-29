@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "Web novels tracker",
+    "description": "The name of the application"
+  },
+  "appDescription": {
+    "message": "This extension will track your reading on your favorite light novels",
+    "description": "The description of the application"
+  }
+}

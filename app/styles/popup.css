@@ -1,0 +1,40 @@
+body {
+    min-width: 650px;
+}
+
+/* HEADER */
+.header {
+    min-height: 32px;
+}
+
+.header .md-toolbar-tools {
+    height: 32px;
+}
+
+.header .btn {
+    font-size: 24px;
+    color: #fff;
+}
+
+.header button {
+    top: 15px;
+}
+
+/* DATATABLES */
+.dataTables_wrapper .dataTables_filter {
+    float: left
+}
+
+/* MATERIAL DESIGN */
+md-toolbar {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+
+.novels md-input-container {
+    padding-bottom: 2px;
+}
+
+/* CUSTOM */
+.main-content {
+    padding-bottom: 10px;
+}
