@@ -11,6 +11,5 @@ angular.module('wnTracker', [
 function mdConfig($mdThemingProvider) {
     $mdThemingProvider.theme('default')
         .primaryColor('blue-grey')
-        .accentColor('light-green')
-        .warnColor('amber');
+        .accentColor('light-green');
 }

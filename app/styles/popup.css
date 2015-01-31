@@ -54,3 +54,11 @@ md-toolbar {
 .clickable {
     cursor: pointer;
 }
+
+.novel-form {
+    padding-top: 40px;
+}
+
+.novel-form-btn {
+    padding-top: 20px;
+}

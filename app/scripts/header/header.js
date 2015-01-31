@@ -1,14 +1,8 @@
 'use strict';
 
 angular.module('wnTracker.header', [])
-.controller('HeaderCtrl', HeaderCtrl)
 .controller('HeaderDetailCtrl', HeaderDetailCtrl)
 .controller('HeaderFormCtrl', HeaderFormCtrl);
-
-/* @ngInject */
-function HeaderCtrl() {
-
-}
 
 /* @ngInject */
 function HeaderDetailCtrl(Novel, novel) {
@@ -30,7 +24,17 @@ function HeaderDetailCtrl(Novel, novel) {
 }
 
 /* @ngInject */
-function HeaderFormCtrl(novel) {
+function HeaderFormCtrl(novel, formType) {
     var vm = this;
     vm.novel = novel;
+    vm.isCreation = isCreation;
+    vm.isModification = isModification;
+
+    function isCreation() {
+        return formType === 'creation';
+    }
+
+    function isModification() {
+        return formType === 'modification';
+    }
 }

@@ -17,13 +17,11 @@ function routerConfig($stateProvider, $urlRouterProvider) {
             views: {
                 '': {
                     templateUrl: 'scripts/novels/novels.list.html',
-                    controller: NovelsCtrl,
+                    controller: 'NovelsCtrl',
                     controllerAs: 'novels'
                 },
                 header: {
-                    templateUrl: 'scripts/header/header.html',
-                    controller: HeaderCtrl,
-                    controllerAs: 'header'
+                    templateUrl: 'scripts/header/header.html'
                 }
             }
         })
@@ -32,7 +30,7 @@ function routerConfig($stateProvider, $urlRouterProvider) {
             views: {
                 '': {
                     templateUrl: 'scripts/novels/novel.detail.html',
-                    controller: NovelCtrl,
+                    controller: 'NovelCtrl',
                     controllerAs: 'novel',
                     resolve: {
                         novel: resolveNovel
@@ -40,7 +38,7 @@ function routerConfig($stateProvider, $urlRouterProvider) {
                 },
                 header: {
                     templateUrl: 'scripts/header/header.detail.html',
-                    controller: HeaderDetailCtrl,
+                    controller: 'HeaderDetailCtrl',
                     controllerAs: 'header',
                     resolve: {
                         novel: resolveNovel
@@ -52,16 +50,25 @@ function routerConfig($stateProvider, $urlRouterProvider) {
             url: '/create',
             views: {
                 '': {
-                    templateUrl: 'scripts/novels/novels.form.html',
-                    controller: NovelFormCtrl,
-                    controllerAs: 'novel'
+                    templateUrl: 'scripts/novels/novel.form.html',
+                    controller: 'NovelFormCtrl',
+                    controllerAs: 'novel',
+                    resolve: {
+                        novel: resolveNovel,
+                        formType: function() {
+                            return 'creation';
+                        }
+                    }
                 },
                 header: {
                     templateUrl: 'scripts/header/header.form.html',
-                    controller: HeaderFormCtrl,
+                    controller: 'HeaderFormCtrl',
                     controllerAs: 'header',
                     resolve: {
-                        formType: 'create'
+                        novel: resolveNovel,
+                        formType: function() {
+                            return 'creation';
+                        }
                     }
                 }
             }
@@ -70,20 +77,25 @@ function routerConfig($stateProvider, $urlRouterProvider) {
             url: '/:id/modify',
             views: {
                 '': {
-                    templateUrl: 'scripts/novels/novels.form.html',
-                    controller: NovelFormCtrl,
+                    templateUrl: 'scripts/novels/novel.form.html',
+                    controller: 'NovelFormCtrl',
                     controllerAs: 'novel',
                     resolve: {
-                        novel: resolveNovel
+                        novel: resolveNovel,
+                        formType: function() {
+                            return 'modification';
+                        }
                     }
                 },
                 header: {
                     templateUrl: 'scripts/header/header.form.html',
-                    controller: HeaderFormCtrl,
+                    controller: 'HeaderFormCtrl',
                     controllerAs: 'header',
                     resolve: {
                         novel: resolveNovel,
-                        formType: 'modify'
+                        formType: function() {
+                            return 'modification';
+                        }
                     }
                 }
             }
@@ -92,14 +104,14 @@ function routerConfig($stateProvider, $urlRouterProvider) {
     /* @ngInject */
     function resolveNovel($q, Novel, $stateParams) {
         if ($stateParams.id) {
-            return Novel.get({id: $stateParams.id})
+            return Novel.get({id: $stateParams.id});
         }
-        return $q.when({
+        return $q.when(new Novel({
             Title: '',
             Url: '',
             ImageUrl: '',
             Summary: '',
             Favorite: false
-        });
+        }));
     }
 }

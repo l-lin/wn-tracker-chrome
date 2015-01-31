@@ -79,16 +79,20 @@ function NovelsCtrl($compile, $scope, DTOptionsBuilder, DTColumnBuilder, DTInsta
     function _buttonsRender(data) {
         return '<md-button ui-sref="novels.detail({id:\'' + data.Id + '\'})" class="md-raised" aria-label="View novel">' +
             '   <i class="fa fa-search"></i>' +
+            '</md-button>&nbsp;' +
+            '<md-button ui-sref="novels.modify({id:\'' + data.Id + '\'})" class="md-primary md-raised" aria-label="Modify novel">' +
+            '   <i class="fa fa-edit"></i>' +
             '</md-button>';
     }
 }
 
 /* @ngInject */
-function NovelCtrl(novel) {
+function NovelCtrl(novel, Novel, $state, $mdToast, $mdDialog) {
     var vm = this;
     vm.novel = novel;
     vm.hasImage = hasImage;
     vm.openNovel = openNovel;
+    vm.deleteNovel = deleteNovel;
 
     function hasImage(imageUrl) {
         return imageUrl && imageUrl !== '';
@@ -99,10 +103,64 @@ function NovelCtrl(novel) {
             url: url
         });
     }
+
+    function deleteNovel(id) {
+        var confirm = $mdDialog.confirm()
+            .title('Are your sure you want to delete this novel?')
+            .ariaLabel('Delete novel')
+            .ok('Yes')
+            .cancel('Cancel');
+        $mdDialog.show(confirm).then(function () {
+            _doDeleteNovel(id);
+        });
+    }
+
+    function _doDeleteNovel(id) {
+        Novel.delete({id: id}).$promise.then(function () {
+            var toast = $mdToast.simple()
+                .content('Novel successfully deleted!')
+                .position('top left right')
+                .action('OK')
+                .hideDelay(3000);
+            $mdToast.show(toast);
+            $state.go('novels.list');
+        });
+    }
 }
 
 /* @ngInject */
-function NovelFormCtrl(novel) {
+function NovelFormCtrl(novel, Novel, formType, $state, $mdToast) {
     var vm = this;
     vm.novel = novel;
+    vm.formType = formType;
+    vm.submit = submit;
+
+    function submit(novel) {
+        var result;
+        switch (formType) {
+            case 'modification':
+                result = Novel.update({id: novel.Id}, novel).$promise;
+                break;
+            default:
+                result = novel.$save();
+                break;
+        }
+        result.then(function() {
+            $mdToast.show(
+                $mdToast.simple()
+                    .content(_getToastMessage(formType))
+                    .position('top left right')
+                    .action('OK')
+                    .hideDelay(3000)
+            );
+            $state.go('novels.list');
+        });
+    }
+
+    function _getToastMessage(formType) {
+        if (formType === 'modification') {
+            return 'Novel successfully modified!';
+        }
+        return 'Novel successfully created!';
+    }
 }
