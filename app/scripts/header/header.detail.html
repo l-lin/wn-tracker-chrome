@@ -1,0 +1,14 @@
+<md-toolbar class="header">
+    <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
+        <md-button class="md-fab md-warn md-raised" aria-label="Back to list" ui-sref="novels.list">
+            <md-tooltip>Back to list</md-tooltip>
+            <span class="btn"><i class="fa fa-chevron-left"></i></span>
+        </md-button>
+        <h3>
+            <i class="clickable fa"
+                ng-click="header.addRemoveFavorite(header.novel)"
+                ng-class="{'favorite fa-star': header.novel.Favorite, 'fa-star-o': !header.novel.Favorite}"></i>
+            {{ header.novel.Title }}
+        </h3>
+    </div>
+</md-toolbar>

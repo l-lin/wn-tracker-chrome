@@ -1,15 +1,16 @@
 'use strict';
 
 angular.module('wnTracker', [
-    'wnTracker.router',
     'wnTracker.novels',
 
     'ngMaterial'
 ])
 .config(mdConfig);
 
+/* @ngInject */
 function mdConfig($mdThemingProvider) {
     $mdThemingProvider.theme('default')
-        .primaryColor('indigo')
-        .accentColor('light-green');
+        .primaryColor('blue-grey')
+        .accentColor('light-green')
+        .warnColor('amber');
 }

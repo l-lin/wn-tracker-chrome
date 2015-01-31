@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="bower_components/angular/angular-csp.css" type="screen">
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
     <link rel="stylesheet" href="bower_components/datatables/media/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css styles/popup.css -->
@@ -15,8 +16,7 @@
 </head>
 <body ng-app="wnTracker">
 
-<header ng-include="'scripts/header/header.html'"></header>
-<md-content ui-view layout="row" layout-align="center center" class="main-content"></md-content>
+<article ui-view></article>
 
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
@@ -30,13 +30,17 @@
 <script src="bower_components/angular-material/angular-material.min.js"></script>
 <script src="bower_components/angular-datatables/dist/angular-datatables.min.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+<script src="scripts/datatables/link.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
 <!-- build:js scripts/popup.js -->
 <script src="scripts/app.js"></script>
-<script src="scripts/router.js"></script>
 <script src="scripts/novels/novels.js"></script>
+<script src="scripts/novels/novels.service.js"></script>
+<script src="scripts/novels/novels.ctrl.js"></script>
+<script src="scripts/novels/novels.router.js"></script>
+<script src="scripts/header/header.js"></script>
 <!-- endbuild -->
 </body>
 </html>

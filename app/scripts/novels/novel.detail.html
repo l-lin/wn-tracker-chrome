@@ -1,0 +1,15 @@
+<article flex="100" class="novel">
+    <section layout="column" layout-align="center center">
+        <div ng-if="novel.hasImage(novel.novel.ImageUrl)">
+            <img src="{{ novel.novel.ImageUrl }}" width="300px" />
+        </div>
+        <h4 class="clickable" ng-click="novel.openNovel(novel.novel.Url)">
+            {{ novel.novel.Url }}
+            <md-tooltip>Open the above link</md-tooltip>
+        </h4>
+        <h3>Summary</h3>
+        <div>
+            {{ novel.novel.Summary }}
+        </div>
+    </section>
+</article>

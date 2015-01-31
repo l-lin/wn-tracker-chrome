@@ -1,0 +1,8 @@
+<article flex="100" class="novels">
+    <md-input-container flex="100">
+        <label>Search novel</label>
+        <input ng-model="novels.query" ng-keyup="novels.search(novels.query)">
+    </md-input-container>
+    <table datatable dt-options="novels.dtOptions" dt-columns="novels.dtColumns" class="row-border hover">
+    </table>
+</article>

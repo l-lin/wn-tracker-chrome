@@ -25,6 +25,14 @@ body {
     float: left
 }
 
+table.dataTable.no-footer {
+    border-bottom-color: #dddddd;
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+    padding: 4px 10px;
+}
+
 /* MATERIAL DESIGN */
 md-toolbar {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
@@ -37,4 +45,12 @@ md-toolbar {
 /* CUSTOM */
 .main-content {
     padding-bottom: 10px;
+}
+
+.favorite {
+    color: #ffd76e;
+}
+
+.clickable {
+    cursor: pointer;
 }
