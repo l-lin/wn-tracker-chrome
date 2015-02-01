@@ -109,11 +109,11 @@ function routerConfig($stateProvider, $urlRouterProvider) {
             });
         }
         return $q.when(new Novel({
-            Title: '',
-            Url: '',
-            ImageUrl: '',
-            Summary: '',
-            Favorite: false
+            title: '',
+            url: '',
+            imageUrl: '',
+            summary: '',
+            favorite: false
         }));
     }
 }

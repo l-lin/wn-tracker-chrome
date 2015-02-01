@@ -3,23 +3,23 @@
         <div layout="row" flex="100">
             <md-input-container flex="80">
                 <label>Title*</label>
-                <input required ng-model="novel.novel.Title">
+                <input required ng-model="novel.novel.title">
             </md-input-container>
-            <md-switch ng-model="novel.novel.Favorite" aria-label="Favorite" class="md-warn" flex>
+            <md-switch ng-model="novel.novel.favorite" aria-label="Favorite" class="md-warn" flex>
                 Favorite
             </md-switch>
         </div>
         <md-input-container flex="100">
             <label>Url*</label>
-            <input required ng-model="novel.novel.Url">
+            <input required ng-model="novel.novel.url">
         </md-input-container>
         <md-input-container flex="100">
             <label>Image URL</label>
-            <input ng-model="novel.novel.ImageUrl">
+            <input ng-model="novel.novel.imageUrl">
         </md-input-container>
         <md-input-container flex="100">
             <label>Summary</label>
-            <textarea ng-model="novel.novel.Summary"></textarea>
+            <textarea ng-model="novel.novel.summary"></textarea>
         </md-input-container>
     </section>
     <section class="novel-form-btn" layout="row" layout-align="center center">

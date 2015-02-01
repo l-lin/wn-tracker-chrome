@@ -1,19 +1,19 @@
 <article flex="100" class="novel">
     <section layout="column" layout-align="center center">
-        <div ng-if="novel.hasImage(novel.novel.ImageUrl)">
-            <img src="{{ novel.novel.ImageUrl }}" width="300px" />
+        <div ng-if="novel.hasImage(novel.novel.imageUrl)">
+            <img src="{{ novel.novel.imageUrl }}" width="300px" />
         </div>
-        <h4 class="clickable" ng-click="novel.openNovel(novel.novel.Url)">
-            {{ novel.novel.Url }}
+        <h4 class="clickable" ng-click="novel.openNovel(novel.novel.url)">
+            {{ novel.novel.url }}
             <md-tooltip>Open the above link</md-tooltip>
         </h4>
         <h3>Summary</h3>
         <div>
-            {{ novel.novel.Summary }}
+            {{ novel.novel.summary }}
         </div>
     </section>
     <section class="novel-form-btn" layout="row" layout-align="center center">
-        <md-button class="md-raised md-warn" aria-label="Delete novel" ng-click="novel.deleteNovel(novel.novel.Id)">
+        <md-button class="md-raised md-warn" aria-label="Delete novel" ng-click="novel.deleteNovel(novel.novel.id)">
             Delete&nbsp;<i class="fa fa-trash"></i>
         </md-button>
     </section>

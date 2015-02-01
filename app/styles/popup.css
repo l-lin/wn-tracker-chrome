@@ -62,3 +62,9 @@ md-toolbar {
 .novel-form-btn {
     padding-top: 20px;
 }
+
+.sign-in {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #ddd;
+}

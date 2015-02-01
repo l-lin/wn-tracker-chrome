@@ -18,9 +18,9 @@ function HeaderDetailCtrl(Novel, novel) {
     }
 
     function addRemoveFavorite(novel) {
-        novel.Favorite = !novel.Favorite;
+        novel.favorite = !novel.favorite;
         Novel.update({
-            id: novel.Id
+            id: novel.id
         }, novel);
     }
 }
