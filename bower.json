@@ -9,8 +9,7 @@
     "angular-ui-router": "~0.2.13",
     "material-design-icons": "~1.0.1",
     "datatables": "~1.10.1",
-    "jquery": "~2.1.1",
-    "font-awesome": "~4.3.0"
+    "jquery": "~2.1.1"
   },
   "devDependencies": {}
 }

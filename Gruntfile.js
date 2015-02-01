@@ -7,7 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
     // Load grunt tasks automatically
     require('load-grunt-tasks')(grunt);
@@ -18,7 +18,8 @@ module.exports = function (grunt) {
     // Configurable paths
     var config = {
         app: 'app',
-        dist: 'dist'
+        dist: 'dist',
+        build: '.tmp'
     };
 
     grunt.initConfig({
@@ -142,8 +143,7 @@ module.exports = function (grunt) {
                 dest: '<%= config.dist %>'
             },
             html: [
-                '<%= config.app %>/popup.html',
-                '<%= config.app %>/options.html'
+                '<%= config.app %>/popup.html'
             ]
         },
 
@@ -154,18 +154,6 @@ module.exports = function (grunt) {
             },
             html: ['<%= config.dist %>/{,*/}*.html'],
             css: ['<%= config.dist %>/styles/{,*/}*.css']
-        },
-
-        // The following *-min tasks produce minifies files in the dist folder
-        imagemin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= config.app %>/images',
-                    src: '{,*/}*.{gif,jpeg,jpg,png}',
-                    dest: '<%= config.dist %>/images'
-                }]
-            }
         },
 
         svgmin: {
@@ -203,27 +191,27 @@ module.exports = function (grunt) {
         // By default, your `index.html`'s <!-- Usemin block --> will take care of
         // minification. These next options are pre-configured if you do not wish
         // to use the Usemin blocks.
-        // cssmin: {
-        //   dist: {
-        //     files: {
-        //       '<%= config.dist %>/styles/popup.css': [
-        //         '<%= config.app %>/styles/{,*/}*.css'
-        //       ]
-        //     }
-        //   }
-        // },
-        // uglify: {
-        //   dist: {
-        //     files: {
-        //       '<%= config.dist %>/scripts/scripts.js': [
-        //         '<%= config.dist %>/scripts/scripts.js'
-        //       ]
-        //     }
-        //   }
-        // },
-        // concat: {
-        //   dist: {}
-        // },
+        //cssmin: {
+        //    dist: {
+        //        files: {
+        //            '<%= config.dist %>/styles/popup.css': [
+        //                '<%= config.app %>/styles/{,*/}*.css'
+        //            ]
+        //        }
+        //    }
+        //},
+        //uglify: {
+        //    dist: {
+        //        files: {
+        //            '<%= config.dist %>/scripts/scripts.js': [
+        //                '<%= config.dist %>/scripts/scripts.js'
+        //            ]
+        //        }
+        //    }
+        //},
+        //concat: {
+        //    dist: {}
+        //},
 
         // Copies remaining files to places other tasks can use
         copy: {
@@ -235,11 +223,23 @@ module.exports = function (grunt) {
                     dest: '<%= config.dist %>',
                     src: [
                         '*.{ico,png,txt}',
-                        'images/{,*/}*.{webp,gif}',
+                        'images/{,*/}*.{webp,gif,png}',
                         '{,*/}*.html',
+                        'scripts/**/*.html',
                         'styles/{,*/}*.css',
-                        'styles/fonts/{,*/}*.*',
-                        '_locales/{,*/}*.json',
+                        'fonts/{,*/}*.*',
+                        '_locales/{,*/}*.json'
+                    ]
+                }]
+            },
+            vendor: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= config.build %>/concat',
+                    dest: '<%= config.dist %>',
+                    src: [
+                        'styles/{,*/}*.css'
                     ]
                 }]
             }
@@ -249,7 +249,6 @@ module.exports = function (grunt) {
         concurrent: {
             chrome: [],
             dist: [
-                'imagemin',
                 'svgmin'
             ],
             test: []
@@ -276,7 +275,7 @@ module.exports = function (grunt) {
         compress: {
             dist: {
                 options: {
-                    archive: function () {
+                    archive: function() {
                         var manifest = grunt.file.readJSON('app/manifest.json');
                         return 'package/Light novels tracker-' + manifest.version + '.zip';
                     }
@@ -288,10 +287,26 @@ module.exports = function (grunt) {
                     dest: ''
                 }]
             }
+        },
+        ngAnnotate: {
+            options: {
+                add: true,
+                singleQuotes: true
+            },
+            dist: {
+                files: {
+                    '<%= config.build %>/concat/scripts/popup.js': ['<%= config.build %>/concat/scripts/popup.js']
+                }
+            }
+        },
+        jsbeautifier: {
+            default: {
+                src: ['<%= config.app %>/scripts/**/*.js', 'Gruntfile.js']
+            }
         }
     });
 
-    grunt.registerTask('debug', function () {
+    grunt.registerTask('debug', function() {
         grunt.task.run([
             'jshint',
             'concurrent:chrome',
@@ -312,6 +327,7 @@ module.exports = function (grunt) {
         'concurrent:dist',
         'cssmin',
         'concat',
+        'ngAnnotate',
         'uglify',
         'copy',
         'usemin',
@@ -319,6 +335,7 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('default', [
+        'jsbeautifier',
         'jshint',
         'test',
         'build'

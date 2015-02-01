@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('wnTracker.header', [])
-.controller('HeaderDetailCtrl', HeaderDetailCtrl)
-.controller('HeaderFormCtrl', HeaderFormCtrl);
+    .controller('HeaderDetailCtrl', HeaderDetailCtrl)
+    .controller('HeaderFormCtrl', HeaderFormCtrl);
 
 /* @ngInject */
 function HeaderDetailCtrl(Novel, novel) {
@@ -19,7 +19,9 @@ function HeaderDetailCtrl(Novel, novel) {
 
     function addRemoveFavorite(novel) {
         novel.Favorite = !novel.Favorite;
-        Novel.update({id: novel.Id}, novel);
+        Novel.update({
+            id: novel.Id
+        }, novel);
     }
 }
 

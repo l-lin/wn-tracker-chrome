@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('wnTracker.novels', [
-    'wnTracker.header',
-    'ngResource',
-    'ngMaterial',
-    'ui.router',
-    'datatables'
-])
-.constant('API_URL', 'https://api-wntracker.herokuapp.com')
-.factory('DTLoadingTemplate', dtLoadingTemplate);
+        'wnTracker.header',
+        'ngResource',
+        'ngMaterial',
+        'ui.router',
+        'datatables'
+    ])
+    .constant('API_URL', 'https://api-wntracker.herokuapp.com')
+    .factory('DTLoadingTemplate', dtLoadingTemplate);
 
 function dtLoadingTemplate() {
     return {

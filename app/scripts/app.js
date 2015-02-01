@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('wnTracker', [
-    'wnTracker.novels',
+        'wnTracker.novels',
 
-    'ngMaterial'
-])
-.config(mdConfig);
+        'ngMaterial'
+    ])
+    .config(mdConfig);
 
 /* @ngInject */
 function mdConfig($mdThemingProvider) {

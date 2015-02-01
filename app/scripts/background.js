@@ -1,7 +1,9 @@
 'use strict';
 
-chrome.runtime.onInstalled.addListener(function (details) {
+chrome.runtime.onInstalled.addListener(function(details) {
     console.log('previousVersion', details.previousVersion);
 });
 
-chrome.browserAction.setBadgeText({text: ''});
+chrome.browserAction.setBadgeText({
+    text: ''
+});

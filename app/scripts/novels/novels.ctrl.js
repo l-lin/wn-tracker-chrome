@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('wnTracker.novels')
-.controller('NovelsCtrl', NovelsCtrl)
-.controller('NovelCtrl', NovelCtrl)
-.controller('NovelFormCtrl', NovelFormCtrl);
+    .controller('NovelsCtrl', NovelsCtrl)
+    .controller('NovelCtrl', NovelCtrl)
+    .controller('NovelFormCtrl', NovelFormCtrl);
 
 /* @ngInject */
 function NovelsCtrl($compile, $scope, DTOptionsBuilder, DTColumnBuilder, DTInstances, API_URL, Novel) {
@@ -16,7 +16,7 @@ function NovelsCtrl($compile, $scope, DTOptionsBuilder, DTColumnBuilder, DTInsta
     vm.addRemoveFavorite = addRemoveFavorite;
     vm.openNovel = openNovel;
 
-    DTInstances.getLast().then(function (dtInstance) {
+    DTInstances.getLast().then(function(dtInstance) {
         vm.dtInstance = dtInstance;
     });
 
@@ -25,9 +25,13 @@ function NovelsCtrl($compile, $scope, DTOptionsBuilder, DTColumnBuilder, DTInsta
     }
 
     function addRemoveFavorite(id) {
-        Novel.get({id: id}).$promise.then(function(novel) {
+        Novel.get({
+            id: id
+        }).$promise.then(function(novel) {
             novel.Favorite = !novel.Favorite;
-            return Novel.update({id: id}, novel).$promise;
+            return Novel.update({
+                id: id
+            }, novel).$promise;
         }).then(function() {
             vm.dtInstance.reloadData();
         });
@@ -49,7 +53,10 @@ function NovelsCtrl($compile, $scope, DTOptionsBuilder, DTColumnBuilder, DTInsta
             })
             .withOption('createdRow', _createdRow)
             // FIXME: Multiple sorting is not working...
-            .withOption('order', [[0, 'desc'], [1, 'asc']]);
+            .withOption('order', [
+                [0, 'desc'],
+                [1, 'asc']
+            ]);
     }
 
     function _buildDTColumns() {
@@ -110,13 +117,15 @@ function NovelCtrl(novel, Novel, $state, $mdToast, $mdDialog) {
             .ariaLabel('Delete novel')
             .ok('Yes')
             .cancel('Cancel');
-        $mdDialog.show(confirm).then(function () {
+        $mdDialog.show(confirm).then(function() {
             _doDeleteNovel(id);
         });
     }
 
     function _doDeleteNovel(id) {
-        Novel.delete({id: id}).$promise.then(function () {
+        Novel.delete({
+            id: id
+        }).$promise.then(function() {
             var toast = $mdToast.simple()
                 .content('Novel successfully deleted!')
                 .position('top left right')
@@ -139,7 +148,9 @@ function NovelFormCtrl(novel, Novel, formType, $state, $mdToast) {
         var result;
         switch (formType) {
             case 'modification':
-                result = Novel.update({id: novel.Id}, novel).$promise;
+                result = Novel.update({
+                    id: novel.Id
+                }, novel).$promise;
                 break;
             default:
                 result = novel.$save();
@@ -148,10 +159,10 @@ function NovelFormCtrl(novel, Novel, formType, $state, $mdToast) {
         result.then(function() {
             $mdToast.show(
                 $mdToast.simple()
-                    .content(_getToastMessage(formType))
-                    .position('top left right')
-                    .action('OK')
-                    .hideDelay(3000)
+                .content(_getToastMessage(formType))
+                .position('top left right')
+                .action('OK')
+                .hideDelay(3000)
             );
             $state.go('novels.list');
         });

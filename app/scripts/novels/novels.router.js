@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wnTracker.novels')
-.config(routerConfig);
+    .config(routerConfig);
 
 /* @ngInject */
 function routerConfig($stateProvider, $urlRouterProvider) {
@@ -104,7 +104,9 @@ function routerConfig($stateProvider, $urlRouterProvider) {
     /* @ngInject */
     function resolveNovel($q, Novel, $stateParams) {
         if ($stateParams.id) {
-            return Novel.get({id: $stateParams.id});
+            return Novel.get({
+                id: $stateParams.id
+            });
         }
         return $q.when(new Novel({
             Title: '',
