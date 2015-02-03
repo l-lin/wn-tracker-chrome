@@ -15,13 +15,13 @@
     })();
 
     function novelsCount(callback) {
-        xhr('GET', 'https://api-wntracker.herokuapp.com/authTest', function (data, status) {
+        xhr('GET', 'https://api-wntracker.herokuapp.com/notifications', function (data, status) {
             if (status >= 400) {
                 callback(-1);
                 return;
             }
-
-            callback(1);
+            var count = _countNotifications(data);
+            callback(count);
         });
     }
 
@@ -48,12 +48,15 @@
                 } else if (count === -2) {
                     text = 'Unable to find count on page';
                 }
+                window.hasNotifications = false;
                 render('?', [166, 41, 41, 255], text);
             } else {
                 if (count > 9999) {
                     count = '∞';
                 }
-                render(count, [65, 131, 196, 255], 'Web novels tracker');
+                var badge = count !== 0 ? count : '';
+                window.hasNotifications = count !== 0;
+                render(badge, [65, 131, 196, 255], 'Web novels tracker');
             }
         });
     }
@@ -62,14 +65,20 @@
     chrome.alarms.onAlarm.addListener(update);
     chrome.runtime.onMessage.addListener(update);
 
-    // FIXME: DELETE ME AFTERWARDS
-    chrome.extension.onConnect.addListener(function(port) {
-        console.log('Connected .....');
-        port.onMessage.addListener(function(msg) {
-            console.log('message recieved'+ msg);
-            port.postMessage('Hi Popup.js');
-        });
-    });
-
     update();
+
+    function _countNotifications(data) {
+        var count = 0;
+        var notifications = JSON.parse(data);
+        if (notifications && notifications.length > 0) {
+            var alreadyDone = {};
+            notifications.forEach(function (notification) {
+                if (!alreadyDone[notification.link]) {
+                    count++;
+                    alreadyDone[notification.link] = true;
+                }
+            });
+        }
+        return count;
+    }
 })(chrome);

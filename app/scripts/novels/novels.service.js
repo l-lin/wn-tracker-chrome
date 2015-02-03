@@ -5,8 +5,8 @@ angular.module('wnTracker.novels')
 
 /* @ngInject */
 function Novel($resource, API_URL) {
-    return $resource(API_URL + '/novels/:id', {
-        id: '@id'
+    return $resource(API_URL + '/novels/:novelId', {
+        novelId: '@novelId'
     }, {
         update: {
             method: 'PUT'

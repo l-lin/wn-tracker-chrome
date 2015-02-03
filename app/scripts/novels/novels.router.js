@@ -22,11 +22,16 @@ function routerConfig($stateProvider, $urlRouterProvider) {
                 },
                 header: {
                     templateUrl: 'scripts/header/header.html'
+                },
+                notifications: {
+                    templateUrl: 'scripts/notifications/notifications.list.html',
+                    controller: 'NotificationsCtrl',
+                    controllerAs: 'notifications'
                 }
             }
         })
         .state('novels.detail', {
-            url: '/:id',
+            url: '/:novelId',
             views: {
                 '': {
                     templateUrl: 'scripts/novels/novel.detail.html',
@@ -74,7 +79,7 @@ function routerConfig($stateProvider, $urlRouterProvider) {
             }
         })
         .state('novels.modify', {
-            url: '/:id/modify',
+            url: '/:novelId/modify',
             views: {
                 '': {
                     templateUrl: 'scripts/novels/novel.form.html',
@@ -103,9 +108,9 @@ function routerConfig($stateProvider, $urlRouterProvider) {
 
     /* @ngInject */
     function resolveNovel($q, Novel, $stateParams) {
-        if ($stateParams.id) {
+        if ($stateParams.novelId) {
             return Novel.get({
-                id: $stateParams.id
+                novelId: $stateParams.novelId
             });
         }
         return $q.when(new Novel({

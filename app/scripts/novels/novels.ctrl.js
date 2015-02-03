@@ -24,13 +24,13 @@ function NovelsCtrl($compile, $scope, DTOptionsBuilder, DTColumnBuilder, DTInsta
         vm.dtInstance.DataTable.search(query).draw();
     }
 
-    function addRemoveFavorite(id) {
+    function addRemoveFavorite(novelId) {
         Novel.get({
-            id: id
+            novelId: novelId
         }).$promise.then(function(novel) {
             novel.favorite = !novel.favorite;
             return Novel.update({
-                id: id
+                novelId: novelId
             }, novel).$promise;
         }).then(function() {
             vm.dtInstance.reloadData();
@@ -74,9 +74,9 @@ function NovelsCtrl($compile, $scope, DTOptionsBuilder, DTColumnBuilder, DTInsta
 
     function _favoriteRender(favorite, type, full) {
         if (favorite) {
-            return '<i class="favorite clickable fa fa-star" ng-click="novels.addRemoveFavorite(\'' + full.id + '\')"></i>';
+            return '<i class="favorite clickable fa fa-star" ng-click="novels.addRemoveFavorite(\'' + full.novelId + '\')"></i>';
         }
-        return '<i class="clickable fa fa-star-o" ng-click="novels.addRemoveFavorite(\'' + full.id + '\')"></i>';
+        return '<i class="clickable fa fa-star-o" ng-click="novels.addRemoveFavorite(\'' + full.novelId + '\')"></i>';
     }
 
     function _titleRender(title, type, data) {
@@ -84,10 +84,10 @@ function NovelsCtrl($compile, $scope, DTOptionsBuilder, DTColumnBuilder, DTInsta
     }
 
     function _buttonsRender(data) {
-        return '<md-button ui-sref="novels.detail({id:\'' + data.id + '\'})" class="md-raised" aria-label="View novel">' +
+        return '<md-button ui-sref="novels.detail({novelId:\'' + data.novelId + '\'})" class="md-raised" aria-label="View novel">' +
             '   <i class="fa fa-search"></i>' +
             '</md-button>&nbsp;' +
-            '<md-button ui-sref="novels.modify({id:\'' + data.id + '\'})" class="md-primary md-raised" aria-label="Modify novel">' +
+            '<md-button ui-sref="novels.modify({novelId:\'' + data.novelId + '\'})" class="md-primary md-raised" aria-label="Modify novel">' +
             '   <i class="fa fa-edit"></i>' +
             '</md-button>';
     }
@@ -111,20 +111,20 @@ function NovelCtrl(novel, Novel, $state, $mdToast, $mdDialog) {
         });
     }
 
-    function deleteNovel(id) {
+    function deleteNovel(novelId) {
         var confirm = $mdDialog.confirm()
             .title('Are your sure you want to delete this novel?')
             .ariaLabel('Delete novel')
             .ok('Yes')
             .cancel('Cancel');
         $mdDialog.show(confirm).then(function() {
-            _doDeleteNovel(id);
+            _doDeleteNovel(novelId);
         });
     }
 
-    function _doDeleteNovel(id) {
+    function _doDeleteNovel(novelId) {
         Novel.delete({
-            id: id
+            novelId: novelId
         }).$promise.then(function() {
             var toast = $mdToast.simple()
                 .content('Novel successfully deleted!')
@@ -149,7 +149,7 @@ function NovelFormCtrl(novel, Novel, formType, $state, $mdToast) {
         switch (formType) {
             case 'modification':
                 result = Novel.update({
-                    id: novel.id
+                    novelId: novel.novelId
                 }, novel).$promise;
                 break;
             default:

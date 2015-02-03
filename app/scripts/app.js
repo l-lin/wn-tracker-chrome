@@ -2,10 +2,10 @@
 
 angular.module('wnTracker', [
         'wnTracker.novels',
+        'wnTracker.constants',
 
         'ngMaterial'
     ])
-    .constant('API_URL', 'https://api-wntracker.herokuapp.com')
     .config(mdConfig)
     .controller('TrackerCtrl', TrackerCtrl);
 
@@ -33,14 +33,7 @@ function TrackerCtrl($http, API_URL) {
 
     function signIn() {
         chrome.tabs.create({
-            url: API_URL + '/login'
+            url: API_URL + '/signin'
         });
     }
-
-    // FIXME: DELETE ME AFTERWARDS
-    var port = chrome.extension.connect({name: 'Sample Communication'});
-    port.postMessage('Hi BackGround');
-    port.onMessage.addListener(function(msg) {
-        console.log('message recieved'+ msg);
-    });
 }
