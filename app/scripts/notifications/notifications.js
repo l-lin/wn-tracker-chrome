@@ -1,57 +1,76 @@
 'use strict';
 
 angular.module('wnTracker.notifications', [
-    'wnTracker.constants',
-    'ngResource'
-])
+        'wnTracker.constants',
+        'ngResource'
+    ])
+    .factory('Notification', Notification)
     .controller('NotificationsCtrl', NotificationsCtrl);
 
 /* @ngInject */
-function NotificationsCtrl(DTOptionsBuilder, DTColumnBuilder, $compile, API_URL, $scope) {
-    var vm = this;
-    vm.hasNotifications = chrome.extension.getBackgroundPage().hasNotifications;
-    vm.openNotification = openNotification;
-    vm.dtOptions = _buildDTOptions();
-    vm.dtColumns = _buildDTColumns();
+function Notification($resource, API_URL) {
+    return $resource(API_URL + '/notifications/:notificationId', {
+        notificationId: '@notificationId'
+    }, {
+        'delete': {
+            method: 'DELETE'
+        }
+    });
+}
 
-    function openNotification(notification) {
+/* @ngInject */
+function NotificationsCtrl(Notification, $q) {
+    var vm = this;
+    // Map <link, [ids]>
+    var mapLinkIds = {};
+    vm.hasNotifications = chrome.extension.getBackgroundPage().hasNotifications;
+    vm.notifications = [];
+    vm.openNotification = openNotification;
+    vm.removeNotification = removeNotification;
+
+    Notification.query().$promise.then(function(notifications) {
+        notifications.forEach(function(notification) {
+            if (!mapLinkIds[notification.link]) {
+                vm.notifications.push(notification);
+                mapLinkIds[notification.link] = [];
+            }
+            mapLinkIds[notification.link].push(notification);
+        });
+        if (notifications.length > 0) {
+            vm.hasNotifications = true;
+        }
+    });
+
+    function openNotification(link) {
+        removeNotification(link);
         chrome.tabs.create({
-            url: notification.link
+            url: link
         });
     }
 
-    // -------------------------------
-
-    function _buildDTOptions() {
-        return DTOptionsBuilder.fromSource(API_URL + '/notifications')
-            .withDOM('rtp')
-            .withOption('headerCallback', function(thead) {
-                angular.element(thead).remove();
-            })
-            .withOption('createdRow', _createdRow);
-    }
-
-    function _buildDTColumns() {
-        return [
-            DTColumnBuilder.newColumn(null, '').notSortable().renderWith(_buttonsRender),
-            DTColumnBuilder.newColumn('title').renderWith(_titleRender).withOption('type', 'link')
-        ];
-    }
-
-    function _createdRow(row) {
-        // Recompiling so we can bind Angular directive to the DT
-        $compile(angular.element(row).contents())($scope);
-    }
-
-    function _titleRender(title, type, data) {
-        return '<span class="clickable" ng-click="notifications.openNotification(\'' + data.link + '\')">' +
-            '   <md-tooltip>' + data.link + '</md-tooltip>' + title +
-            '</span>';
-    }
-
-    function _buttonsRender(data) {
-        return '<md-button class="md-raised" aria-label="Remove notification" ng-click="notifications.removeNotification(\'' + data.notificationId + '\')">' +
-            '   <i class="fa fa-close"></i>' +
-            '</md-button>';
+    function removeNotification(link) {
+        var promises = [];
+        mapLinkIds[link].forEach(function(notification) {
+            promises.push(Notification.delete({
+                notificationId: notification.notificationId
+            }).$promise);
+        });
+        $q.all(promises).then(function() {
+            var index = 0;
+            for (var i = 0; i < vm.notifications.length; i++) {
+                if (vm.notifications[i].link === link) {
+                    index = i;
+                    break;
+                }
+            }
+            vm.notifications.splice(index, 1);
+            if (vm.notifications.length === 0) {
+                vm.hasNotifications = false;
+            }
+            // Notify the background
+            chrome.runtime.sendMessage({
+                rerender: true
+            });
+        });
     }
 }

@@ -25,6 +25,10 @@ function TrackerCtrl($http, API_URL) {
     $http.get(API_URL + '/authTest')
         .success(function() {
             vm.isAuthenticated = true;
+            // Notify the background
+            chrome.runtime.sendMessage({
+                rerender: true
+            });
         })
         .error(function(data, status) {
             console.log(status);

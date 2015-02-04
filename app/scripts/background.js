@@ -1,10 +1,10 @@
 (function(chrome) {
     'use strict';
 
-    var xhr = (function () {
+    var xhr = (function() {
         var xhr = new XMLHttpRequest();
-        return function (method, url, callback) {
-            xhr.onreadystatechange = function () {
+        return function(method, url, callback) {
+            xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     callback(xhr.responseText, xhr.status);
                 }
@@ -15,7 +15,7 @@
     })();
 
     function novelsCount(callback) {
-        xhr('GET', 'https://api-wntracker.herokuapp.com/notifications', function (data, status) {
+        xhr('GET', 'https://api-wntracker.herokuapp.com/notifications', function(data, status) {
             if (status >= 400) {
                 callback(-1);
                 return;
@@ -40,7 +40,7 @@
     }
 
     function update() {
-        novelsCount(function (count) {
+        novelsCount(function(count) {
             if (count < 0) {
                 var text;
                 if (count === -1) {
@@ -61,7 +61,9 @@
         });
     }
 
-    chrome.alarms.create({periodInMinutes: 1});
+    chrome.alarms.create({
+        periodInMinutes: 1
+    });
     chrome.alarms.onAlarm.addListener(update);
     chrome.runtime.onMessage.addListener(update);
 
@@ -72,7 +74,7 @@
         var notifications = JSON.parse(data);
         if (notifications && notifications.length > 0) {
             var alreadyDone = {};
-            notifications.forEach(function (notification) {
+            notifications.forEach(function(notification) {
                 if (!alreadyDone[notification.link]) {
                     count++;
                     alreadyDone[notification.link] = true;
