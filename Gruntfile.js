@@ -277,7 +277,7 @@ module.exports = function(grunt) {
                 options: {
                     archive: function() {
                         var manifest = grunt.file.readJSON('app/manifest.json');
-                        return 'package/Light novels tracker-' + manifest.version + '.zip';
+                        return 'package/wn-tracker-' + manifest.version + '.zip';
                     }
                 },
                 files: [{
