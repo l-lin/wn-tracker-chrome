@@ -23,7 +23,7 @@ function NotificationsCtrl(Notification, $q) {
     var vm = this;
     // Map <link, [ids]>
     var mapLinkIds = {};
-    vm.hasNotifications = chrome.extension.getBackgroundPage().hasNotifications;
+    vm.hasNotifications = false;
     vm.notifications = [];
     vm.openNotification = openNotification;
     vm.removeNotification = removeNotification;
@@ -49,6 +49,11 @@ function NotificationsCtrl(Notification, $q) {
     }
 
     function removeNotification(link) {
+        // We are removing afterward, so instead of waiting, we set the flag immediately
+        if (vm.notifications.length === 1) {
+            vm.hasNotifications = false;
+        }
+
         var promises = [];
         mapLinkIds[link].forEach(function(notification) {
             promises.push(Notification.delete({
@@ -64,9 +69,6 @@ function NotificationsCtrl(Notification, $q) {
                 }
             }
             vm.notifications.splice(index, 1);
-            if (vm.notifications.length === 0) {
-                vm.hasNotifications = false;
-            }
             // Notify the background
             chrome.runtime.sendMessage({
                 rerender: true

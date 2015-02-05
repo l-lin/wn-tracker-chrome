@@ -1,6 +1,6 @@
 {
   "name": "wn-tracker-chrome",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "angular": "~1.3.11",
     "angular-resource": "~1.3.11",
