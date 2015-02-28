@@ -4,6 +4,9 @@
             <md-tooltip>Back to list</md-tooltip>
             <span class="btn"><i class="fa fa-chevron-left"></i></span>
         </md-button>
+        <h3 class="clickable feed-url" ng-click="header.openNovel(header.novel.feedUrl)">
+            {{ header.novel.feedUrl }}
+        </h3>
         <h3>
             <i class="clickable fa"
                 ng-click="header.addRemoveFavorite(header.novel)"

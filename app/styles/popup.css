@@ -94,3 +94,10 @@ md-toolbar {
 .notifications .md-button.md-warn {
     text-align: center;
 }
+
+.feed-url {
+    text-overflow: ellipsis;
+    width: 280px;
+    white-space: nowrap;
+    overflow: hidden;
+}
