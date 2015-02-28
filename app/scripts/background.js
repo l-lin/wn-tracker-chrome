@@ -66,6 +66,41 @@
     });
     chrome.alarms.onAlarm.addListener(update);
     chrome.runtime.onMessage.addListener(update);
+    chrome.omnibox.onInputChanged.addListener(omniboxInputChanged);
+    chrome.omnibox.onInputEntered.addListener(omniboxInputEntered);
+
+    function omniboxInputChanged(text, suggest) {
+        xhr('GET', 'https://api-wntracker.herokuapp.com/novels/search?title=' + text, function(data, status) {
+            if (status >= 400) {
+                return;
+            }
+            var result = [];
+            var novels = JSON.parse(data);
+            if (novels && novels.length > 0) {
+                novels.forEach(function(novel) {
+                    result.push({
+                        content: novel.title,
+                        description: novel.title
+                    });
+                });
+            }
+            suggest(result);
+        });
+    }
+
+    function omniboxInputEntered(text) {
+        xhr('GET', 'https://api-wntracker.herokuapp.com/novels/search?title=' + text, function(data, status) {
+            if (status >= 400) {
+                return;
+            }
+            var novels = JSON.parse(data);
+            if (novels && novels.length > 0) {
+                chrome.tabs.create({
+                    url: novels[0].url
+                });
+            }
+        });
+    }
 
     update();
 
