@@ -48,6 +48,7 @@ function NovelsCtrl($compile, $scope, DTOptionsBuilder, DTColumnBuilder, DTInsta
     function _buildDTOptions() {
         return DTOptionsBuilder.fromSource(API_URL + '/novels')
             .withDOM('rtp')
+            .withOption('stateSave', true)
             .withOption('headerCallback', function(thead) {
                 angular.element(thead).remove();
             })
@@ -62,7 +63,7 @@ function NovelsCtrl($compile, $scope, DTOptionsBuilder, DTColumnBuilder, DTInsta
     function _buildDTColumns() {
         return [
             DTColumnBuilder.newColumn('favorite').renderWith(_favoriteRender).withOption('type', 'boolean'),
-            DTColumnBuilder.newColumn('title').renderWith(_titleRender).withOption('type', 'link'),
+            DTColumnBuilder.newColumn('title').renderWith(_titleRender),
             DTColumnBuilder.newColumn(null, '').notSortable().renderWith(_buttonsRender)
         ];
     }
@@ -80,7 +81,9 @@ function NovelsCtrl($compile, $scope, DTOptionsBuilder, DTColumnBuilder, DTInsta
     }
 
     function _titleRender(title, type, data) {
-        return '<span class="clickable" ng-click="novels.openNovel(\'' + data.url + '\')">' + title + '</span>';
+        return '<span class="clickable" ng-click="novels.openNovel(\'' + data.url + '\')" title="' + data.summary + '">' +
+            title +
+            '</span>';
     }
 
     function _buttonsRender(data) {

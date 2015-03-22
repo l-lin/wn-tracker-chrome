@@ -95,7 +95,7 @@
             }
             var novels = JSON.parse(data);
             if (novels && novels.length > 0) {
-                chrome.tabs.create({
+                chrome.tabs.update({
                     url: novels[0].url
                 });
             }
