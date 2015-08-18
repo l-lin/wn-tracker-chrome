@@ -21,23 +21,32 @@ function TrackerCtrl($http, API_URL) {
     var vm = this;
     vm.isAuthenticated = false;
     vm.signIn = signIn;
+    vm.isSleeping = false;
 
-    $http.get(API_URL + '/authTest')
-        .success(function() {
-            vm.isAuthenticated = true;
-            // Notify the background
-            chrome.runtime.sendMessage({
-                rerender: true
+    if (isOnline()) {
+        $http.get(API_URL + '/authTest')
+            .success(function() {
+                vm.isAuthenticated = true;
+                // Notify the background
+                chrome.runtime.sendMessage({
+                    rerender: true
+                });
+            })
+            .error(function(data, status) {
+                console.log(status);
+                vm.isAuthenticated = false;
             });
-        })
-        .error(function(data, status) {
-            console.log(status);
-            vm.isAuthenticated = false;
-        });
+    } else {
+        vm.isSleeping = true;
+    }
 
     function signIn() {
         chrome.tabs.create({
             url: API_URL + '/signin'
         });
     }
+}
+
+function isOnline() {
+    return new Date().getUTCHours() > 6;
 }

@@ -2,17 +2,27 @@
     'use strict';
 
     var xhr = (function() {
-        var xhr = new XMLHttpRequest();
-        return function(method, url, callback) {
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    callback(xhr.responseText, xhr.status);
-                }
+        if (isOnline()) {
+            var xhr = new XMLHttpRequest();
+            return function(method, url, callback) {
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        callback(xhr.responseText, xhr.status);
+                    }
+                };
+                xhr.open(method, url);
+                xhr.send();
             };
-            xhr.open(method, url);
-            xhr.send();
-        };
+        } else {
+            return function(method, url, callback) {
+                callback('Server is offline', 404);
+            };
+        }
     })();
+
+    function isOnline() {
+        return new Date().getUTCHours() > 6;
+    }
 
     function novelsCount(callback) {
         xhr('GET', 'https://api-wntracker.herokuapp.com/notifications', function(data, status) {
@@ -40,25 +50,29 @@
     }
 
     function update() {
-        novelsCount(function(count) {
-            if (count < 0) {
-                var text;
-                if (count === -1) {
-                    text = 'You have to be connected to the internet and logged into Google';
-                } else if (count === -2) {
-                    text = 'Unable to find count on page';
+        if (isOnline()) {
+            novelsCount(function(count) {
+                if (count < 0) {
+                    var text;
+                    if (count === -1) {
+                        text = 'You have to be connected to the internet and logged into Google';
+                    } else if (count === -2) {
+                        text = 'Unable to find count on page';
+                    }
+                    window.hasNotifications = false;
+                    render('?', [166, 41, 41, 255], text);
+                } else {
+                    if (count > 9999) {
+                        count = '∞';
+                    }
+                    var badge = count !== 0 ? count : '';
+                    window.hasNotifications = count !== 0;
+                    render(badge, [65, 131, 196, 255], 'Web novels tracker');
                 }
-                window.hasNotifications = false;
-                render('?', [166, 41, 41, 255], text);
-            } else {
-                if (count > 9999) {
-                    count = '∞';
-                }
-                var badge = count !== 0 ? count : '';
-                window.hasNotifications = count !== 0;
-                render(badge, [65, 131, 196, 255], 'Web novels tracker');
-            }
-        });
+            });
+        } else {
+            render('zzz', [166, 41, 41, 255], 'WN tracker is currently offline (from 12AM to 6AM UTC)!');
+        }
     }
 
     chrome.alarms.create({

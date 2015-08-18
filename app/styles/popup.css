@@ -101,3 +101,9 @@ md-toolbar {
     white-space: nowrap;
     overflow: hidden;
 }
+
+.nap {
+    width: 650px;
+    height: 480px;
+    background-image: url("../images/nap.png");
+}

@@ -20,7 +20,8 @@
     <div ng-if="tracker.isAuthenticated">
         <article ui-view></article>
     </div>
-    <div ng-if="!tracker.isAuthenticated" class="sign-in">
+    <div class="nap" ng-if="tracker.isSleeping"></div>
+    <div ng-if="!tracker.isAuthenticated && !tracker.isSleeping" class="sign-in">
         <md-content layout="row" layout-align="center center" class="main-content">
             <md-button class="md-raised md-accent" aria-label="Sign in" ng-click="tracker.signIn()">
                 Sign in&nbsp;<i class="fa fa-sign-in"></i>
@@ -37,7 +38,6 @@
 <script src="bower_components/angular-resource/angular-resource.min.js"></script>
 <script src="bower_components/angular-animate/angular-animate.min.js"></script>
 <script src="bower_components/angular-aria/angular-aria.min.js"></script>
-<script src="bower_components/hammerjs/hammer.min.js"></script>
 <script src="bower_components/angular-material/angular-material.min.js"></script>
 <script src="bower_components/angular-datatables/dist/angular-datatables.min.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
