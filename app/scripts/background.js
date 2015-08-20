@@ -2,9 +2,9 @@
     'use strict';
 
     var xhr = (function() {
-        if (isOnline()) {
-            var xhr = new XMLHttpRequest();
-            return function(method, url, callback) {
+        var xhr = new XMLHttpRequest();
+        return function(method, url, callback) {
+            if (isOnline()) {
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4) {
                         callback(xhr.responseText, xhr.status);
@@ -12,12 +12,12 @@
                 };
                 xhr.open(method, url);
                 xhr.send();
-            };
-        } else {
-            return function(method, url, callback) {
-                callback('Server is offline', 404);
-            };
-        }
+            } else {
+                return function(method, url, callback) {
+                    callback('Server is offline', 404);
+                };
+            }
+        };
     })();
 
     function isOnline() {
